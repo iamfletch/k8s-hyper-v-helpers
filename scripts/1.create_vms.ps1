@@ -4,6 +4,9 @@
 $ISO = Read-Host "Enter the path to your ISO file"
 $VMPath = "C:\VMs"
 $SwitchName = "k8s"
+$NetAdapter = Read-Host "Enter the net adapter to use"
+
+New-VMSwitch -Name $SwitchName -NetAdapterName $NetAdapter -AllowManagementOS $true
 
 # VM names
 $VMNames = @(
