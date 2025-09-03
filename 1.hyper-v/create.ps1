@@ -4,8 +4,8 @@
 $ISO = Read-Host "Enter the path to your ISO file"
 $VMPath = "C:\VMs"
 $SwitchName = "k8s"
-$NetAdapter = Read-Host "Enter the net adapter to use"
 
+$NetAdapter = Read-Host "Enter the net adapter to use"
 New-VMSwitch -Name $SwitchName -NetAdapterName $NetAdapter -AllowManagementOS $true
 
 # VM names
@@ -50,5 +50,3 @@ foreach ($VMName in $VMNames) {
 
     Write-Host "$VMName created and started." -ForegroundColor Green
 }
-
-Write-Host "All Kubernetes VMs have been created and started!" -ForegroundColor Yellow
