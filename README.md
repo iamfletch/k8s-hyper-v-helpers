@@ -72,9 +72,39 @@ kubeadm join k8s-vip:6443 --token nga15w.qsyz6z6kk2u56dt4 \
 Manually edit kube-vip manifest back.
 
 ## 5. CP 1&2 setup
-Copy kube-vip manifest
-
-Run the join command from the init.
 
 Kick your self for not using --upload-certs
+
+Copy certs and manifests to other cp:
+
+On cp0
+```bash
+sudo tar -czf cp.tar.gz -C /etc/kubernetes/ pki/ca.crt pki/ca.key pki/sa.key pki/sa.pub pki/front-proxy-ca
+.crt pki/front-proxy-ca.key pki/etcd/ca.crt pki/etcd/ca.key manifests/kube-vip.yaml
+```
+
+On localhost
+```bash
+scp -3 k8s-cp-0:cp.tar.gz k8s-cp-1:
+scp -3 k8s-cp-0:cp.tar.gz k8s-cp-2:
+```
+
+On cp1/cp2:
+```bash
+sudo tar -xvzf cp.tar.gz -C /etc/kubernetes/
+```
+
+Remove the cp.tar.gz, not a good idea to leave keys lying around.
+
+As I left it a while (few days) a new token was needed:
+
+```bash
+kubeadm token create --print-join-command
+```
+
+now on CP 1&2, run this join command with `--control-plane --ignore-preflight-errors Mem`
+
+## 6. workers
+
+Just run the join command and it should work.
 
